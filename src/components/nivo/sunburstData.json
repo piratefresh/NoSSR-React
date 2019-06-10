@@ -1,0 +1,14 @@
+{
+  "name": "Email Sent",
+  "color": "hsl(188, 70%, 50%)",
+  "children": [
+    {
+      "name": "Viewed",
+      "color": "hsl(252, 70%, 50%)"
+    },
+    {
+      "name": "Sent",
+      "color": "hsl(287, 70%, 50%"
+    }
+  ]
+}

@@ -1,33 +1,105 @@
-.App {
-  text-align: center;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  width: 100%;
+  height: 100%;
+  font-family: "Roboto", sans-serif;
+  background-color: #f0f6ff;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+.icon,
+.text {
+  vertical-align: middle;
+  display: inline-block;
+}
+.k-widget {
+  border: none !important;
+}
+.k-grid-header {
+  background-color: #fff !important;
+  border: none !important;
+  border-bottom: 1px solid #eff6ff !important;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.k-grid td {
+  border: none !important;
+}
+.k-grid th {
+  border: none !important;
+}
+/* .k-treeview .k-in.k-state-selected {
+  background-color: #1f98f4 !important;
+} */
+
+.k-treeview .k-in.k-state-selected {
+  color: rgba(0, 0, 0, 0.87) !important;
 }
 
-.App-link {
-  color: #61dafb;
+.k-widget ::selection,
+.k-block ::selection,
+.k-panel ::selection {
+  background-color: #1f98f4 !important;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.k-grid-header,
+.k-grid-toolbar,
+.k-grouping-header,
+.k-grid-add-row,
+.k-grid-footer {
+  background-color: #fff !important;
+}
+
+.k-grid-toolbar {
+  display: flex !important;
+  align-items: flex-end !important;
+  width: 100%;
+  border: none !important;
+}
+
+/* Tabs */
+.tab-list {
+  border-bottom: 1px solid #ccc;
+  padding-left: 0;
+}
+
+.tab-list-item {
+  display: inline-block;
+  list-style: none;
+  margin-bottom: -1px;
+  padding: 0.5rem 0.75rem;
+}
+
+.tab-list-active {
+  background-color: white;
+  border: solid #ccc;
+  border-width: 1px 1px 0 1px;
+}
+
+/* Checkbox Styles */
+
+.k-checkbox-label::before {
+  border: none;
+  background-color: #dfe7f2;
+}
+
+.k-checkbox:checked + .k-checkbox-label::after {
+  background-color: #1f98f4;
+}
+
+.error-input {
+  border-color: red !important;
+}
+
+.k-checkbox-label::before,
+.k-radio-label::before {
+  border-width: none !important;
+  border-style: none !important;
+}
+
+/* Radiobutton */
+.k-radio-label::before {
+  transform: scale(2) !important;
 }
