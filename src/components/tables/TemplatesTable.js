@@ -54,9 +54,9 @@ class TableSection extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     // Typical usage (don't forget to compare props):
-    if (this.props.data !== prevProps.data) {
+    if (this.props.resources !== prevProps.resources) {
       this.setState((prevState, props) => ({
-        items: props.data
+        items: props.resources
       }));
     }
     return null;
@@ -69,7 +69,7 @@ class TableSection extends Component {
       nextIndex: prevState.nextIndex + 16
     }));
 
-    const nextUsers = this.props.data.slice(
+    const nextUsers = this.props.resources.slice(
       this.state.index,
       this.state.nextIndex
     );
@@ -78,15 +78,16 @@ class TableSection extends Component {
       // Note: Depending on the API you're using, this value may
       // be returned as part of the payload to indicate that there
       // is no additional data to be loaded
-      hasMore: this.state.items.length < this.props.data.length,
+      hasMore: this.state.items.length < this.props.resources.length,
       isLoading: false,
       items: [...this.state.items, ...nextUsers]
     });
   };
   render() {
+    const {error, hasMore, isLoading, items} = this.state;
     return (
       <TableContainer>
-        <TemplateGrid style={{}} data={this.props.data} template />
+        <TemplateGrid style={{}} data={items} template />
       </TableContainer>
     );
   }

@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React, {Fragment, useState} from "react";
 import styled from "styled-components";
 import {TreeCardStyles as MiniCard} from "../components/cards";
 import {
@@ -11,8 +11,12 @@ import GridCard from "../components/grid/Card/GridCard";
 import Modal from "../components/modal";
 import AddForm from "../components/AddForm/Form";
 // GRAPHQL
-import gql from "graphql-tag";
-import {Query} from "react-apollo";
+import {useQuery, useMutation} from "react-apollo-hooks";
+import {
+  GET_MASTERLISTS,
+  GET_RESOURCES,
+  GET_CATEGORIES
+} from "../queries/queries";
 // Dummy Data
 import category from "../data/category";
 // Styles/Icons
@@ -78,186 +82,108 @@ const ResourceHeaderStyle = styled.div`
   }
 `;
 
-class Resource extends React.Component {
-  state = {show: false, listView: false};
+// const result = resourceData.GetResources.filter(
+//   item => item.ResourceCategoryMembership[0].ResourceCategoryID === criteria
+// );
 
-  showModal = () => {
-    this.setState({show: true});
-  };
-
-  hideModal = () => {
-    this.setState({show: false});
-  };
-
-  toggleList = () => {
-    this.setState({listView: !this.state.listView});
-  };
-
-  render() {
-    return (
-      <Query query={GET_CATEGORIES}>
-        {({loading, error, data}) => {
-          if (loading) return null;
-          if (error) return `Error! ${error}`;
-
-          return (
-            <Fragment>
-              <MainPageTitle>Resource Management</MainPageTitle>
-              <ResourceWrapper>
-                <MiniCard style={{}}>
-                  <div className="cardTitle">
-                    <ButtonRoundedBlue type="button" onClick={this.showModal}>
-                      <PlusIcon />
-                    </ButtonRoundedBlue>
-                    <ButtonRoundedBlue>
-                      <PencilIcon />
-                    </ButtonRoundedBlue>
-                    <ButtonRoundedRed>
-                      <DeleteIcon />
-                    </ButtonRoundedRed>
-                  </div>
-                  <TreeView data={data.getCategories} />
-                </MiniCard>
-
-                {/* Modal */}
-                <Modal
-                  show={this.state.show}
-                  handleClose={this.hideModal}
-                  modalTitle="Add Category"
-                >
-                  <AddForm />
-                </Modal>
-
-                <ResourceContainer>
-                  <ResourceHeaderStyle>
-                    <div className="input-wrapper">
-                      <label>
-                        <input
-                          className="searchInput"
-                          type="text"
-                          placeholder="Search"
-                        />
-                      </label>
-                    </div>
-
-                    <div className="buttons">
-                      <ButtonHalfRounded
-                        type="button"
-                        onClick={this.toggleList}
-                      >
-                        {this.state.listView ? "Card View" : "List View"}
-                      </ButtonHalfRounded>
-                      <ButtonHalfRounded>+ Add</ButtonHalfRounded>
-                      <ButtonHalfRounded>Select All</ButtonHalfRounded>
-                    </div>
-                  </ResourceHeaderStyle>
-                  <Query query={GET_RESOURCES}>
-                    {({loading, error, data, client}) => {
-                      if (loading) return null;
-                      if (error) return `Error! ${error}`;
-                      client.writeData({data: {resouces: data.GetResources}});
-                      const resourceData = client.readQuery({
-                        query: GET_RESOURCES
-                      });
-                      console.log(resourceData);
-                      return (
-                        <GridCard
-                          data={resourceData.GetResources}
-                          listView={this.state.listView}
-                        />
-                      );
-                    }}
-                  </Query>
-                </ResourceContainer>
-              </ResourceWrapper>
-            </Fragment>
-          );
-        }}
-      </Query>
-    );
+const filterResources = (resources, selectedCategoryId) => {
+  if (selectedCategoryId === 2246) {
+    return resources;
   }
+
+  console.log(resources.ResourceCategoryMembership);
+
+  return resources.filter(resource => {
+    return resource.ResourceCategoryMembership.map(
+      resource => resource.ResourceCategoryID
+    ).includes(selectedCategoryId);
+  });
+};
+
+function Resource() {
+  const [show, setShowState] = useState(false);
+  const [listView, setListView] = useState(false);
+
+  const {data, loading, error} = useQuery(GET_MASTERLISTS);
+  // true until slowest query is fetched
+  if (loading) {
+    return <div>...loading</div>;
+  }
+
+  console.log(data, error);
+
+  const categories = data.getCategories;
+  const selectedCategoryId = data.selectedCategoryId.categoryId;
+
+  const resources = filterResources(data.GetResources, selectedCategoryId);
+
+  const showModal = () => {
+    setShowState(true);
+  };
+
+  const hideModal = () => {
+    setShowState(false);
+  };
+
+  const toggleList = () => {
+    setListView(prevState => !prevState);
+  };
+  return (
+    <Fragment>
+      <MainPageTitle>Resource Management</MainPageTitle>
+      <ResourceWrapper>
+        <MiniCard style={{}}>
+          <div className="cardTitle">
+            <ButtonRoundedBlue type="button" onClick={showModal}>
+              <PlusIcon />
+            </ButtonRoundedBlue>
+            <ButtonRoundedBlue>
+              <PencilIcon />
+            </ButtonRoundedBlue>
+            <ButtonRoundedRed>
+              <DeleteIcon />
+            </ButtonRoundedRed>
+          </div>
+          <TreeView data={categories} />
+        </MiniCard>
+
+        {/* Modal */}
+        <Modal show={show} handleClose={hideModal} modalTitle="Add Category">
+          <AddForm />
+        </Modal>
+
+        <ResourceContainer>
+          <ResourceHeaderStyle>
+            <div className="input-wrapper">
+              <label>
+                <input
+                  className="searchInput"
+                  type="text"
+                  placeholder="Search"
+                />
+              </label>
+            </div>
+
+            <div className="buttons">
+              <ButtonHalfRounded type="button" onClick={toggleList}>
+                {listView ? "Card View" : "List View"}
+              </ButtonHalfRounded>
+              <ButtonHalfRounded>+ Add</ButtonHalfRounded>
+              <ButtonHalfRounded>Select All</ButtonHalfRounded>
+            </div>
+          </ResourceHeaderStyle>
+          <GridCard resources={resources} listView={listView} />
+        </ResourceContainer>
+      </ResourceWrapper>
+    </Fragment>
+  );
 }
 
 export default Resource;
 
-const GET_CATEGORIES = gql`
-  {
-    getCategories {
-      ID
-      Name
-      Children {
-        Thumbnail
-        ID
-        Name
-        ...ChildrenRecursive
-      }
-    }
-  }
-
-  fragment ChildrenRecursive on Children {
-    Children {
-      ...ChildFields
-      Children {
-        ...ChildFields
-        Children {
-          ...ChildFields
-          Children {
-            ...ChildFields
-            Children {
-              ...ChildFields
-            }
-          }
-        }
-      }
-    }
-  }
-
-  fragment ChildFields on Children {
-    Thumbnail
-    ID
-    Name
-  }
-`;
-
-const GET_RESOURCES = gql`
-  query {
-    GetResources {
-      ID
-      Name
-      CategoryID
-      Thumbnail
-      ResourceCategoryMembership {
-        ResourceID
-        ResourceCategoryID
-        ResourceOrder
-      }
-      ChildResources {
-        ...ChildrenRecursive
-      }
-    }
-  }
-
-  fragment ChildrenRecursive on ChildResources {
-    ChildResources {
-      ...ResourcesFields
-      ChildResources {
-        ...ResourcesFields
-        ChildResources {
-          ...ResourcesFields
-          ChildResources {
-            ...ResourcesFields
-            ChildResources {
-              ...ResourcesFields
-            }
-          }
-        }
-      }
-    }
-  }
-
-  fragment ResourcesFields on ChildResources {
-    ID
-    Thumbnail
-    SortOrder
-  }
-`;
+{
+  /* <GridCard
+resources={GetResources}
+listView={listView}
+/> */
+}

@@ -109,7 +109,13 @@ class GridContainer extends React.Component {
 
   render() {
     let columnNames = Object.keys(this.props.data[0]);
-    let forDeletion = ["Children", "__typename", "ID"];
+    let forDeletion = [
+      "Children",
+      "__typename",
+      "ID",
+      "ResourceCategoryMembership",
+      "ChildResources"
+    ];
     columnNames = columnNames.filter(item => !forDeletion.includes(item));
     console.log(columnNames);
     const rounded = this.props.rounded;

@@ -32,9 +32,9 @@ function TreeCardSection(props) {
   // On mount we run a deep map function to make a new obj with proper formattation for treelist
   useEffect(async () => {
     const formattedData = await _.mapDeep(
-      props.data.Children,
+      props.data,
       (value, key, parent, ctx) => {
-        return {text: value.Name, id: value.ID};
+        return {text: value.Name, id: value.ID, expanded: true};
       },
       {childrenPath: "Children"}
     );
@@ -44,7 +44,9 @@ function TreeCardSection(props) {
       return key;
     });
     // We set the new renamed obj in state
-    setData(renamedObj);
+    const arr = [renamedObj];
+    console.log(arr);
+    setData(arr);
   }, []);
   return (
     <CardContent>

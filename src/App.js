@@ -47,6 +47,7 @@ const Index = lazy(() => import("./routes/index"));
 const Templates = lazy(() => import("./routes/templates"));
 const Resources = lazy(() => import("./routes/resources"));
 const Callback = lazy(() => import("./routes/callback"));
+const Shared = lazy(() => import("./routes/shared"));
 const Login = lazy(() => import("./routes/login"));
 
 const LoadingMessage = () => "I'm loading...";
@@ -79,6 +80,7 @@ class App extends Component {
                 <PrivateRoute exact path="/" component={Index} />
                 <PrivateRoute path="/templates" component={Templates} />
                 <PrivateRoute path="/resources" component={AppResources} />
+                <Route path="/shared" component={Shared} />
                 <PrivateRoute
                   path="/resources/:name"
                   component={AppResources}

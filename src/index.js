@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Suspense} from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import {BrowserRouter as Router} from "react-router-dom";
@@ -7,33 +7,16 @@ import {ApolloProvider} from "react-apollo";
 import {ApolloLink} from "apollo-link";
 import {HttpLink} from "apollo-link-http";
 import {InMemoryCache} from "apollo-cache-inmemory";
-import {withClientState} from "apollo-link-state";
 import {ApolloProvider as ApolloHooksProvider} from "react-apollo-hooks";
 import {resolvers} from "./resolvers/resolvers";
-import {
-  GET_RESOURCES,
-  GET_TEMPLATES,
-  GET_CATEGORIES
-} from "../src/gql/masterlist";
 import auth from "../src/auth/Auth";
 import * as serviceWorker from "./serviceWorker";
-
-const cache = new InMemoryCache();
-
-const defaults = {
-  networkStatus: {
-    __typename: "NetworkStatus",
-    isConnected: false
-  },
-  selectedRepositoryIds: ["MDEwOlJlcG9zaXRvcnk2MzM1MjkwNw=="]
-};
-
-const stateLink = withClientState({
-  cache
-});
+import {Fetching} from "../src/components/loading/fetching";
 
 const URL = "http://localhost:4000/graphql";
 const JWTToken = auth.getIdToken();
+
+const cache = new InMemoryCache();
 
 const httpLink = new HttpLink({
   uri: URL,
@@ -42,53 +25,74 @@ const httpLink = new HttpLink({
   }
 });
 
-const link = ApolloLink.from([stateLink, httpLink]);
-
 const client = new ApolloClient({
-  link,
+  link: httpLink,
   cache,
-  resolvers: resolvers,
+  resolvers: {
+    Mutation: {
+      setCategoryId: (_, {categoryId}, {cache}) => {
+        const data = {
+          selectedCategoryId: {
+            categoryId,
+            __typename: "categoryID"
+          }
+        };
+        cache.writeData({data});
+        return null;
+      },
+      setThumbnailTemplates: (_, {categoryId}, {cache}) => {
+        const data = {
+          templateThumbnailId: {
+            categoryId,
+            __typename: "templateThumbnailId"
+          }
+        };
+        cache.writeData({data});
+        return null;
+      }
+    }
+  },
   connectToDevTools: true
 });
 
-// We initilazie our cache with master list of resource, categories, and templates
-const initData = async () => {
-  const resourcesData = await client.query({
-    query: GET_RESOURCES
-  });
-  const categoriesData = await client.query({
-    query: GET_CATEGORIES
-  });
-  const templatesData = await client.query({
-    query: GET_TEMPLATES
-  });
-  console.log(categoriesData.data.getCategories);
-  client.writeData({
-    data: {
-      resources: resourcesData.data.GetResources,
-      categories: categoriesData.data.getCategories,
-      templates: templatesData.data.getTemplates
+cache.writeData({
+  data: {
+    selectedCategoryId: {
+      categoryId: 2246,
+      __typename: "categoryID"
     }
-  });
-};
-
-initData();
+  }
+});
 
 // client.resetStore()
 client.onResetStore(async () => {
-  initData();
+  cache.writeData({
+    data: {
+      selectedCategoryId: {
+        categoryId: 2246
+      }
+    }
+  });
 });
 // client.clearStore()
 client.onClearStore(async () => {
-  initData();
+  cache.writeData({
+    data: {
+      selectedCategoryId: {
+        categoryId: 2246
+      }
+    }
+  });
 });
 
 ReactDOM.render(
   <Router>
     <ApolloProvider client={client}>
-      <ApolloHooksProvider client={client}>
-        <App />
-      </ApolloHooksProvider>
+      <Suspense fallback={<Fetching />}>
+        <ApolloHooksProvider client={client}>
+          <App />
+        </ApolloHooksProvider>
+      </Suspense>
     </ApolloProvider>
   </Router>,
   document.getElementById("root")

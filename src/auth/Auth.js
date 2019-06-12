@@ -58,7 +58,7 @@ class Auth {
   setSession(authResult) {
     this.idToken = authResult.idToken;
     // set the time that the id token will expire at
-    this.expiresAt = authResult.expiresIn * 1000 + new Date().getTime();
+    this.expiresAt = authResult.expiresIn * 100000 + new Date().getTime();
     localStorage.setItem(this.authFlag, JSON.stringify(true));
     localStorage.setItem("access_token", authResult.accessToken);
     localStorage.setItem("id_token", authResult.idToken);
