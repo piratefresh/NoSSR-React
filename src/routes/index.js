@@ -71,24 +71,28 @@ class Index extends Component {
           })}
 
           <MiniCard style={{maxHeight: "350px"}}>
-            <SharedSection>
+            <CardContent>
               <CardTitle>Shared</CardTitle>
-              <DonutChart id="donut4" />
-              <div className="section-stats">
-                <div className="stats">
-                  <div className="title">Sent</div>
-                  <div className="stat">100|50%</div>
+              <DonutChart id="donut4" style={{overflow: "hidden"}} />
+              <SharedSection>
+                <div className="section-stats">
+                  <div className="stats">
+                    <div className="title">Sent</div>
+                    <div className="stat">100|50%</div>
+                  </div>
+                  <div className="stats">
+                    <div className="title">Opened</div>
+                    <div className="stat">100|50%</div>
+                  </div>
                 </div>
-                <div className="stats">
-                  <div className="title">Opened</div>
-                  <div className="stat">100|50%</div>
-                </div>
-              </div>
-            </SharedSection>
+              </SharedSection>
+            </CardContent>
           </MiniCard>
           <MiniCard style={{maxHeight: "350px"}}>
-            <CardTitle>Users</CardTitle>
-            <StackedBarChart />
+            <CardContent>
+              <CardTitle>Users</CardTitle>
+              <StackedBarChart />
+            </CardContent>
           </MiniCard>
         </TableContainer>
       </Fragment>
@@ -151,9 +155,10 @@ const SharedSection = styled.div`
 const CardTitle = styled.h3`
   font-size: 1rem;
   letter-spacing: 0.52px;
-  color: ${props => props.theme.colors.cardHeader};
+  color: ${props => props.theme.colors.grey};
   border-bottom: 1px solid #eff6ff;
-  min-height: 45px;
+  height: 50px;
+  max-height: 50px;
   @media (max-width: 1000px) {
     text-align: center;
   }

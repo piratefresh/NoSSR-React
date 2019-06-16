@@ -8,7 +8,7 @@ const CardContent = styled.div`
   .cardTitle {
     font-size: 0.875rem;
     letter-spacing: 0.52px;
-    color: ${props => props.theme.colors.cardHeader};
+    color: ${props => props.theme.colors.grey};
     border-bottom: 1px solid #eff6ff;
     width: 100%;
     min-height: 45px;

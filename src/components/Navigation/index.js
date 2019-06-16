@@ -1,8 +1,10 @@
-import React, {Component} from "react";
+import React, {useState, useCallback} from "react";
+import {withRouter} from "react-router-dom";
 import styled from "styled-components";
 import setvilogo from "../../images/setvilogo.png";
 import NavLink from "./NavLink";
 import auth from "../../auth/Auth";
+import MenuDropdown from "../Dropdown/MenuDropdown";
 // icons
 import HomeIcon from "../../icons/HomeIcon";
 import ResourcesIcon from "../../icons/app/ResourceIcon";
@@ -34,6 +36,20 @@ const Nav = styled.nav`
     height: 100%;
     width: 100%;
     margin-top: 2em;
+    color: #708eb0;
+    .normal {
+      svg {
+        margin: 1%;
+        fill: #708eb0;
+      }
+    }
+    .active {
+      border-left: ${props => `${props.theme.colors.blue} 5px solid`};
+      color: ${props => props.theme.colors.blue};
+      svg {
+        fill: ${props => props.theme.colors.blue};
+      }
+    }
   }
   img {
     height: 42px;
@@ -59,135 +75,100 @@ const Nav = styled.nav`
   }
 `;
 
-class Navigation extends Component {
-  logout = () => {
+function Navigation() {
+  const [listOpen, setListOpen] = useState(false);
+  const closeDropdown = useCallback(() => setListOpen(false), []);
+
+  const logout = () => {
     auth.logout();
     this.props.history.replace("/");
   };
-  render() {
-    return (
-      <Nav>
-        <div className="logo-container">
-          <a href="http://">
-            <img src={setvilogo} alt="" srcSet="" />
-          </a>
-        </div>
-        <div className="nav-container">
-          <NavLink
-            to="/"
-            activeStyle={{
-              color: "#1F98F4"
-            }}
-          >
-            <HomeIcon />
-            Home
-          </NavLink>
-          <NavLink
-            to="/resources"
-            activeStyle={{
-              color: "#1F98F4"
-            }}
-          >
-            <ResourcesIcon />
-            Resources
-          </NavLink>
-          <NavLink
-            to="/presentations"
-            activeStyle={{
-              color: "#1F98F4"
-            }}
-          >
-            <PresentationsIcon />
-            Presentations
-          </NavLink>
-          <NavLink
-            to="/templates"
-            activeStyle={{
-              color: "#1F98F4"
-            }}
-          >
-            <TemplatesIcon />
-            Templates
-          </NavLink>
-          <NavLink
-            to="/shared"
-            activeStyle={{
-              color: "#1F98F4"
-            }}
-          >
-            <SharedIcon />
-            Shared
-          </NavLink>
-          <NavLink
-            to="/analytics/dashboard"
-            activeStyle={{
-              color: "#1F98F4"
-            }}
-          >
-            <AnalyticsIcon />
-            Analytics
-          </NavLink>
-          <NavLink
-            to="/users"
-            activeStyle={{
-              color: "#1F98F4"
-            }}
-          >
-            <UsersIcon />
-            Users
-          </NavLink>
-          <NavLink
-            to="/pushnotifications"
-            activeStyle={{
-              color: "#1F98F4"
-            }}
-          >
-            <PushNotifyIcon />
-            Push Notifications
-          </NavLink>
-          <NavLink
-            to="/settings"
-            activeStyle={{
-              color: "#1F98F4"
-            }}
-          >
-            <SettingsIcon />
-            Settings
-          </NavLink>
-          <NavLink
-            to="/activitylog"
-            activeStyle={{
-              color: "#1F98F4"
-            }}
-          >
-            <ActivityLogIcon />
-            Activity Log
-          </NavLink>
-          <NavLink
-            to="/livehelp"
-            activeStyle={{
-              color: "#1F98F4"
-            }}
-          >
-            <LiveHelpIcon />
-            LiveHelp
-          </NavLink>
-          <NavLink
-            to="/login"
-            onClick={() => {
-              this.logout();
-            }}
-            activeStyle={{
-              color: "#1F98F4"
-            }}
-          >
-            <LogoutIcon />
-            Logout
-          </NavLink>
-        </div>
-      </Nav>
-    );
-  }
+
+  return (
+    <Nav>
+      <div className="logo-container">
+        <a href="http://">
+          <img src={setvilogo} alt="" srcSet="" />
+        </a>
+      </div>
+      <div className="nav-container">
+        <NavLink
+          to="/"
+          className="normal"
+          activeClassName="active"
+          exact={true}
+        >
+          <HomeIcon />
+          Home
+        </NavLink>
+        <NavLink to="/resources" className="normal" activeClassName="active">
+          <ResourcesIcon />
+          Resources
+        </NavLink>
+        <NavLink
+          to="/presentations"
+          className="normal"
+          activeClassName="active"
+        >
+          <PresentationsIcon />
+          Presentations
+        </NavLink>
+        <NavLink to="/templates" className="normal" activeClassName="active">
+          <TemplatesIcon />
+          Templates
+        </NavLink>
+        <NavLink
+          to="/analytics/resources"
+          className="normal"
+          activeClassName="active"
+          onClick={() => {
+            setListOpen(prevState => {
+              return !prevState;
+            });
+          }}
+        >
+          <AnalyticsIcon />
+          Analytics
+          <MenuDropdown listOpen={listOpen} />
+        </NavLink>
+        <NavLink to="/users" className="normal" activeClassName="active">
+          <UsersIcon />
+          Users
+        </NavLink>
+        <NavLink
+          to="/notifications"
+          className="normal"
+          activeClassName="active"
+        >
+          <PushNotifyIcon />
+          Push Notifications
+        </NavLink>
+        <NavLink to="/settings" className="normal" activeClassName="active">
+          <SettingsIcon />
+          Settings
+        </NavLink>
+        <NavLink to="/activitylog" className="normal" activeClassName="active">
+          <ActivityLogIcon />
+          Activity Log
+        </NavLink>
+        <NavLink to="/livehelp" className="normal" activeClassName="active">
+          <LiveHelpIcon />
+          LiveHelp
+        </NavLink>
+        <NavLink
+          to="/login"
+          onClick={() => {
+            logout();
+          }}
+          className="normal"
+          activeClassName="active"
+        >
+          <LogoutIcon />
+          Logout
+        </NavLink>
+      </div>
+    </Nav>
+  );
 }
 
-export default Navigation;
+export default withRouter(Navigation);

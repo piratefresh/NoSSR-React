@@ -10,7 +10,7 @@ const dataSource = {
   chart: {
     showpercentvalues: "1",
     decimals: "1",
-    doughnutRadius: "20",
+    doughnutRadius: "10",
     enableSmartLabels: 0,
     skipOverlapLabels: 0,
     plottooltext:
@@ -34,7 +34,7 @@ class DoughnutChart extends React.Component {
       id: this.props.id,
       type: "doughnut2d",
       width: 350,
-      height: 250,
+      height: 190,
       dataFormat: "json",
       dataSource: dataSource
     };

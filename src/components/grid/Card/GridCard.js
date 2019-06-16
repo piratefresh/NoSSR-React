@@ -1,22 +1,17 @@
-import gql from "graphql-tag";
-import React, {Component} from "react";
-import {useQuery} from "react-apollo-hooks";
+import React, {Component, Fragment} from "react";
 import {Link} from "react-router-dom";
 import styled from "styled-components";
 import {SingleResourceCardStyles as Card} from "../../cards";
 import ResourceGrid from "../Grid";
-import {ButtonRoundedGreen, ButtonHalfRounded} from "../../buttons";
+import {ButtonRoundedGreen} from "../../buttons";
 import Checkbox from "../../checkbox";
 import {ButtonRoundedOverlay} from "../../buttons";
 import ProgressiveImage from "react-progressive-image";
 import placeholderImg from "../../../images/Rectangle.png";
 /* Icons */
 import DownloadIcon from "../../../icons/DownloadIcon";
-import SearchIcon from "../../../icons/SearchIcon";
 import EditIcon from "../../../icons/EditIcon";
 import LaunchIcon from "../../../icons/LaunchIcon";
-/* Dummy Data */
-import products from "../../../data/products.js";
 
 class GridCard extends Component {
   constructor(props) {
@@ -94,7 +89,7 @@ class GridCard extends Component {
   render() {
     const {error, hasMore, isLoading, items} = this.state;
     return (
-      <ResourceContainer>
+      <Fragment>
         {this.props.listView ? (
           <ResourceGrid data={items} title="Resource" />
         ) : (
@@ -137,18 +132,17 @@ class GridCard extends Component {
             {/* {!hasMore && <div>You did it! You reached the end!</div>} */}
           </ResourceGridContainer>
         )}
-      </ResourceContainer>
+      </Fragment>
     );
   }
 }
 
-const ResourceContainer = styled.div`
-  height: 100%;
-`;
+const ResourceContainer = styled.div``;
 const ResourceGridContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   grid-gap: 2em;
+  width: 100%;
   a {
     position: relative;
     text-decoration: none;
@@ -159,7 +153,7 @@ const CardContent = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  max-width: 320px;
+  max-width: 350px;
   max-height: 250px;
   color: ${props => props.theme.colors.grey};
   .k-form-field {
@@ -172,7 +166,8 @@ const CardContent = styled.div`
     background-color: #fff;
   }
   img {
-    width: 320px;
+    display: block;
+    width: 100%;
     height: 200px;
     object-fit: cover;
     overflow: hidden;
@@ -197,7 +192,6 @@ const CardContent = styled.div`
 const Overlay = styled.div`
   z-index: 1;
   display: none;
-  background: rgba(0, 0, 0, 0.1);
   position: absolute;
   width: 100%;
   height: 100%;
@@ -207,6 +201,8 @@ const Overlay = styled.div`
   ${Card}:hover & {
     display: flex;
     justify-content: flex-end;
+    border: ${props => `${props.theme.colors.blue} 1px solid`}
+    box-shadow: ${props => props.theme.shadow}
   }
   .cba-buttons {
     margin-top: 5px;

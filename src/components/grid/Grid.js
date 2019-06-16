@@ -9,6 +9,8 @@ import "@progress/kendo-theme-material/dist/all.css";
 import StatusIcon from "../../icons/statusIcon";
 import {Renderers} from "./renderers";
 import {ButtonStyleSecondary, ButtonStyleBlue} from "../buttons";
+import TemplateGridHeader from "./TemplateGridHeader";
+import LottieLoader from "../loading/lottieLoader";
 
 const CardStyles = styled.div`
   background: #ffffff;
@@ -29,11 +31,6 @@ const CardStyles = styled.div`
       text-align: center;
     }
   }
-`;
-
-const TemplatesHeader = styled.div`
-  display: flex;
-  justify-content: flex-end;
 `;
 
 // Clone product before edit to keep an original copy
@@ -114,25 +111,20 @@ class GridContainer extends React.Component {
       "__typename",
       "ID",
       "ResourceCategoryMembership",
-      "ChildResources"
+      "ChildResources",
+      "Resources",
+      "PresentationItems"
     ];
+
     columnNames = columnNames.filter(item => !forDeletion.includes(item));
     console.log(columnNames);
-    const rounded = this.props.rounded;
+    const {rounded, template} = this.props;
     return (
       <CardStyles>
-        <h3>
-          {this.props.title && this.props.analytics
-            ? `${this.props.title} Activity`
-            : null}{" "}
-        </h3>
-        {this.props.template ? (
-          <TemplatesHeader>
-            <ButtonStyleBlue>+ Add Template</ButtonStyleBlue>
-          </TemplatesHeader>
-        ) : null}
+        {template ? <TemplateGridHeader /> : null}
+
         {this.state.data.length == 0 ? (
-          <h2>Loading..</h2>
+          <LottieLoader />
         ) : (
           <Grid
             data={this.state.data}
@@ -202,7 +194,7 @@ class GridContainer extends React.Component {
                     )}
                   />
                 );
-              } else if (name == "Status") {
+              } else if (name == "Active") {
                 return (
                   <Column
                     key={name}
@@ -210,7 +202,7 @@ class GridContainer extends React.Component {
                     cell={props => (
                       <td>
                         {console.log(props.dataItem[props.field] === 1)}
-                        {props.dataItem[props.field] === 0 ? (
+                        {props.dataItem[props.field] === true ? (
                           <StatusIcon fill="#4CAF50" />
                         ) : (
                           <StatusIcon fill="#F44336" />

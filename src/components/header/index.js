@@ -11,7 +11,7 @@ const HeaderSectionStyle = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-
+  color: ${props => props.theme.colors.grey}
   margin-bottom: 2.5em;
 `;
 

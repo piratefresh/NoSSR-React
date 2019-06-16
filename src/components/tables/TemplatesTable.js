@@ -1,13 +1,12 @@
 import React, {Component} from "react";
 import styled from "styled-components";
 import TemplateGrid from "../grid/Grid";
-import templates from "../../data/templatesData";
 
 const TableContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-top: 6em;
+  margin-top: 2em;
 `;
 
 class TableSection extends Component {
@@ -87,7 +86,7 @@ class TableSection extends Component {
     const {error, hasMore, isLoading, items} = this.state;
     return (
       <TableContainer>
-        <TemplateGrid style={{}} data={items} template />
+        <TemplateGrid data={items} template />
       </TableContainer>
     );
   }

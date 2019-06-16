@@ -95,9 +95,8 @@ const dataSource = {
 
 class ColumnChart extends React.Component {
   render() {
-    let cardW = this.props.cardWidth;
+    let cardW = this.props.cardWidth - 50;
     const chartConfigs = {
-      id: "dashboardchart",
       type: "column2d",
       width: cardW,
       height: 350,

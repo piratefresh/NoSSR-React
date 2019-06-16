@@ -1,6 +1,9 @@
 import React, {Fragment, useState} from "react";
 import styled from "styled-components";
-import {TreeCardStyles as MiniCard} from "../components/cards";
+import {
+  TreeCardStyles as MiniCard,
+  ResourceTopBarCardStyles
+} from "../components/cards";
 import {
   ButtonRoundedRed,
   ButtonRoundedBlue,
@@ -10,15 +13,11 @@ import TreeView from "../components/treelist/TreeView";
 import GridCard from "../components/grid/Card/GridCard";
 import Modal from "../components/modal";
 import AddForm from "../components/AddForm/Form";
+import SearchInput from "../components/form/SearchInput";
+import LottieLoader from "../components/loading/lottieLoader";
 // GRAPHQL
-import {useQuery, useMutation} from "react-apollo-hooks";
-import {
-  GET_MASTERLISTS,
-  GET_RESOURCES,
-  GET_CATEGORIES
-} from "../queries/queries";
-// Dummy Data
-import category from "../data/category";
+import {useQuery} from "react-apollo-hooks";
+import {GET_MASTERLISTS} from "../queries/queries";
 // Styles/Icons
 import {MainPageTitle} from "../components/titles";
 import PlusIcon from "../icons/PlusIcon";
@@ -30,6 +29,7 @@ const ResourceWrapper = styled.div`
   position: relative;
   display: flex;
   flex-direction: row;
+
   .cardTitle {
     display: flex;
     color: ${props => props.theme.colors.cardHeader};
@@ -46,52 +46,29 @@ const ResourceWrapper = styled.div`
 `;
 
 const ResourceContainer = styled.div`
-  height: 100;
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
 `;
 
 const ResourceHeaderStyle = styled.div`
+  position: relative;
+  z-index: 2000;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   margin-bottom: 2em;
-  .input-wrapper {
-    display: grid;
-    grid-template-columns: [input] 1fr [label] auto;
-    .searchInput {
-      grid-area: input;
-      border: none;
-      border-radius: 20px;
-      flex: 1;
-      font-size: 16px;
-      font-weight: 200;
-      height: 33px;
-      margin: 0;
-      width: 300px;
-      padding: 5px;
-      -webkit-appearance: textfield;
-      :focus {
-        outline: none;
-      }
-    }
-    svg {
-      grid-area: label;
-      background: #1f98f4;
-      height: 100%;
-    }
-  }
+  width: 100%;
+  height: 100%;
+  padding: 0 2em;
 `;
 
-// const result = resourceData.GetResources.filter(
-//   item => item.ResourceCategoryMembership[0].ResourceCategoryID === criteria
-// );
-
+// Sets selected category id in cache, which we later extract to filter items in our resource array
 const filterResources = (resources, selectedCategoryId) => {
   if (selectedCategoryId === 2246) {
     return resources;
   }
-
-  console.log(resources.ResourceCategoryMembership);
 
   return resources.filter(resource => {
     return resource.ResourceCategoryMembership.map(
@@ -105,12 +82,11 @@ function Resource() {
   const [listView, setListView] = useState(false);
 
   const {data, loading, error} = useQuery(GET_MASTERLISTS);
+
   // true until slowest query is fetched
   if (loading) {
-    return <div>...loading</div>;
+    return <LottieLoader />;
   }
-
-  console.log(data, error);
 
   const categories = data.getCategories;
   const selectedCategoryId = data.selectedCategoryId.categoryId;
@@ -132,7 +108,7 @@ function Resource() {
     <Fragment>
       <MainPageTitle>Resource Management</MainPageTitle>
       <ResourceWrapper>
-        <MiniCard style={{}}>
+        <MiniCard>
           <div className="cardTitle">
             <ButtonRoundedBlue type="button" onClick={showModal}>
               <PlusIcon />
@@ -153,25 +129,19 @@ function Resource() {
         </Modal>
 
         <ResourceContainer>
-          <ResourceHeaderStyle>
-            <div className="input-wrapper">
-              <label>
-                <input
-                  className="searchInput"
-                  type="text"
-                  placeholder="Search"
-                />
-              </label>
-            </div>
+          <ResourceTopBarCardStyles>
+            <ResourceHeaderStyle>
+              <SearchInput />
 
-            <div className="buttons">
-              <ButtonHalfRounded type="button" onClick={toggleList}>
-                {listView ? "Card View" : "List View"}
-              </ButtonHalfRounded>
-              <ButtonHalfRounded>+ Add</ButtonHalfRounded>
-              <ButtonHalfRounded>Select All</ButtonHalfRounded>
-            </div>
-          </ResourceHeaderStyle>
+              <div className="buttons">
+                <ButtonHalfRounded type="button" onClick={toggleList}>
+                  {listView ? "Card View" : "List View"}
+                </ButtonHalfRounded>
+                <ButtonHalfRounded>+ Add</ButtonHalfRounded>
+                <ButtonHalfRounded>Select All</ButtonHalfRounded>
+              </div>
+            </ResourceHeaderStyle>
+          </ResourceTopBarCardStyles>
           <GridCard resources={resources} listView={listView} />
         </ResourceContainer>
       </ResourceWrapper>
@@ -180,10 +150,3 @@ function Resource() {
 }
 
 export default Resource;
-
-{
-  /* <GridCard
-resources={GetResources}
-listView={listView}
-/> */
-}

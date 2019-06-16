@@ -69,3 +69,12 @@ export const SingleResourceCardStyles = styled(BaseCardStyles)`
   max-width: 100%;
   max-height: 250px;
 `;
+export const ResourceTopBarCardStyles = styled(BaseCardStyles)`
+  position: sticky;
+  top: 0%;
+  z-index: 2000;
+  margin-bottom: 2em;
+`;
+export const MapCardStyles = styled(BaseCardStyles)`
+  flex-direction: column;
+`;

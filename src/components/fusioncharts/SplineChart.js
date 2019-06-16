@@ -3,13 +3,16 @@ import FusionCharts from "fusioncharts/core";
 import MultiSpline2D from "fusioncharts/viz/msspline";
 import FusionTheme from "fusioncharts/themes/es/fusioncharts.theme.fusion";
 import ReactFC from "react-fusioncharts";
-import styled from "styled-components";
 
 ReactFC.fcRoot(FusionCharts, MultiSpline2D, FusionTheme);
 
 const dataSource = {
   chart: {
-    theme: "fusion"
+    theme: "fusion",
+    chartLeftMargin: "40",
+    chartTopMargin: "0",
+    chartRightMargin: "40",
+    chartBottomMargin: "0"
   },
   categories: [
     {
@@ -40,9 +43,8 @@ const dataSource = {
   ],
   dataset: [
     {
-      seriesname: "Peter",
+      seriesname: "View Resources",
       color: "#1F98F4",
-      anchorBorderHoverThickness: 5,
       data: [
         {
           value: "123"
@@ -68,7 +70,7 @@ const dataSource = {
       ]
     },
     {
-      seriesname: "John",
+      seriesname: "Creating Setvi Presentations",
       color: "#4CAF50",
       data: [
         {
@@ -95,7 +97,7 @@ const dataSource = {
       ]
     },
     {
-      seriesname: "Matthew",
+      seriesname: "Viewing Setvi Presentations",
       color: "#DEA700",
       data: [
         {
@@ -122,7 +124,7 @@ const dataSource = {
       ]
     },
     {
-      seriesname: "Tom",
+      seriesname: "Sharing Setvi Presentations",
       color: "#F44336",
       data: [
         {
@@ -145,33 +147,6 @@ const dataSource = {
         },
         {
           value: "123"
-        }
-      ]
-    },
-    {
-      seriesname: "Bob",
-      color: "#625FBE",
-      data: [
-        {
-          value: "532"
-        },
-        {
-          value: "456"
-        },
-        {
-          value: "342"
-        },
-        {
-          value: "234"
-        },
-        {
-          value: "50"
-        },
-        {
-          value: "892"
-        },
-        {
-          value: "492"
         }
       ]
     }

@@ -1,10 +1,10 @@
-import React, {Component} from "react";
+import React from "react";
 import styled from "styled-components";
 import TemplatesTable from "../components/tables/TemplatesTable";
+import LottieLoader from "../components/loading/lottieLoader";
 // GRAPHQL
 import {GET_MASTERLISTS} from "../queries/queries";
-import {useQuery, useMutation} from "react-apollo-hooks";
-import gql from "graphql-tag";
+import {useQuery} from "react-apollo-hooks";
 
 const TemplatesContent = styled.div`
   h1 {
@@ -12,46 +12,26 @@ const TemplatesContent = styled.div`
   }
 `;
 
-const getThumbId = templates => {
-  const thumbArr = templates.map(template => template.Resources.map(id => id));
-
-  return thumbArr.map(id => {
-    return id[0];
-  });
-};
-
-const getThumbnailUrl = (thumbID, resources) => {
-  resources.map(resource => {
-    if (thumbID === resource.ResourceID) {
-      return resource.Thumbnail;
-    }
-  });
-};
-
-function arraymove(arr, fromIndex, toIndex) {
-  var element = arr[fromIndex];
-  arr.splice(fromIndex, 1);
-  arr.splice(toIndex, 0, element);
-}
-
 export default function TemplatesSection() {
   const {data, loading, error} = useQuery(GET_MASTERLISTS);
   // true until slowest query is fetched
   if (loading) {
-    return <div>...loading</div>;
+    return <LottieLoader />;
   }
   const templates = data.getTemplates;
   const resources = data.GetResources;
 
-  const thumbnailIds = getThumbId(templates);
-  const resourceId = getThumbnailUrl(thumbnailIds, resources);
+  let result = resources.filter(o1 => {
+    return templates.some(template => o1.ResourceID === template.Resources[0]);
+  });
 
-  // resourceId.map(resource => {
-  //   templates.map(template => {
-  //     console.log(resource.Thumbnail);
-  //     template.Thumbnail = resource.Thumbnail;
-  //   });
-  // });
+  result.map(result =>
+    templates.map(template => {
+      if (template.Resources[0] === result.ResourceID) {
+        return (template.Thumbnail = result.Thumbnail);
+      }
+    })
+  );
 
   const onSubmit = data => {
     alert("Form submitted, please check browser console");

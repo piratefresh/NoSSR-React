@@ -60,7 +60,7 @@ body {
 }
 
 /* Tabs */
-.tab-list {
+/* .tab-list {
   border-bottom: 1px solid #ccc;
   padding-left: 0;
 }
@@ -76,7 +76,7 @@ body {
   background-color: white;
   border: solid #ccc;
   border-width: 1px 1px 0 1px;
-}
+} */
 
 /* Checkbox Styles */
 
@@ -102,4 +102,15 @@ body {
 /* Radiobutton */
 .k-radio-label::before {
   transform: scale(2) !important;
+}
+
+.marker-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.marker-btn img {
+  width: 20px;
+  height: 20px;
 }

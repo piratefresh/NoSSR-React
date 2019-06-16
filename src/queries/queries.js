@@ -29,11 +29,14 @@ const GET_MASTERLISTS = gql`
       }
     }
     getTemplates {
+      Thumbnail
       Name
       AddedBy
       ID
       Active
       Resources
+      DateAdded
+      LastChanged
     }
     selectedCategoryId @client {
       categoryId
@@ -99,8 +102,42 @@ const GET_TEMPLATES = gql`
       ID
       Active
       Resources
+      DateAdded
+      LastChanged
     }
   }
 `;
 
-export {GET_MASTERLISTS, GET_TEMPLATES};
+const GET_PRESENTATIONS = gql`
+  query {
+    getPresentations {
+      UserName
+      Name
+      Message
+      DateAdded
+      LastChanged
+      PresentationItems {
+        Name
+        Order
+        PresentationKitID
+      }
+    }
+  }
+`;
+
+const GET_MAP_MARKERS = gql`
+  query {
+    getUserPresentationViews {
+      ClientName
+      ClientEmail
+      Views {
+        Latitude
+        Longitude
+        City
+        State
+      }
+    }
+  }
+`;
+
+export {GET_MASTERLISTS, GET_TEMPLATES, GET_PRESENTATIONS, GET_MAP_MARKERS};

@@ -1,10 +1,15 @@
 import React, {Component, lazy, Suspense, Fragment} from "react";
-import {Route, Switch, Redirect, withRouter} from "react-router-dom";
+import {Route, Switch, withRouter} from "react-router-dom";
 import styled, {createGlobalStyle, ThemeProvider} from "styled-components";
 import auth from "../src/auth/Auth";
 import PrivateRoute from "../src/utils/PrivateRoute";
 import Meta from "./components/Meta";
 import Navigation from "./components/Navigation";
+import Lottie from "react-lottie";
+import LegoLoading from "./images/410-lego-loader.json";
+import AnalyticsResources from "./routes/analyticsresources";
+import AnalyticsTemplates from "./routes/analyticstemplates";
+import AnalyticsPresentations from "./routes/analyticspresentation";
 import "./App.css";
 
 const theme = {
@@ -17,7 +22,8 @@ const theme = {
     orange: "#DEA700",
     Red: "#F44336",
     greyblue: "#4E5A69"
-  }
+  },
+  shadow: "0 2px 15px 1px rgba(18, 106, 211, 0.11)"
 };
 
 // Global styles but theme- and update-able!
@@ -37,20 +43,36 @@ const Inner = styled.div`
   flex-grow: 1;
   min-height: 100%;
   font-family: "Roboto", sans-serif;
+  -webkit-font-smoothing: antialiased;
   padding: ${props => (props.auth ? "4em" : "0")};
 `;
 
 // App
 const AppResources = lazy(() => import("./routes/appresources"));
+const Templates = lazy(() => import("./routes/templates"));
+const Settings = lazy(() => import("./routes/settings"));
+const Presentations = lazy(() => import("./routes/presentations"));
+const Notifications = lazy(() => import("./routes/notifications"));
 // Analytics
 const Index = lazy(() => import("./routes/index"));
-const Templates = lazy(() => import("./routes/templates"));
-const Resources = lazy(() => import("./routes/resources"));
 const Callback = lazy(() => import("./routes/callback"));
 const Shared = lazy(() => import("./routes/shared"));
 const Login = lazy(() => import("./routes/login"));
+const MapView = lazy(() => import("./routes/map"));
 
-const LoadingMessage = () => "I'm loading...";
+// Options for Lottie Player
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: LegoLoading,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice"
+  }
+};
+
+const LoadingMessage = () => (
+  <Lottie options={defaultOptions} height={400} width={400} />
+);
 
 class App extends Component {
   async componentDidMount() {
@@ -66,20 +88,40 @@ class App extends Component {
 
   render() {
     return (
-      <Fragment>
-        {console.log(auth.isAuthenticated())}
-        {auth.isAuthenticated() === true ? <Navigation /> : <Fragment />}
-
-        <Suspense fallback={<LoadingMessage />}>
-          <Meta />
+      <ThemeProvider theme={theme}>
+        <Fragment>
           <GlobalStyle />
-          <ThemeProvider theme={theme}>
+          {console.log(auth.isAuthenticated())}
+          {auth.isAuthenticated() === true ? <Navigation /> : <Fragment />}
+
+          <Suspense fallback={<LoadingMessage />}>
+            <Meta />
+
             <Inner auth={auth.isAuthenticated()}>
               <Switch>
                 <Route path="/login" component={Login} />
                 <PrivateRoute exact path="/" component={Index} />
                 <PrivateRoute path="/templates" component={Templates} />
+                <PrivateRoute path="/presentations" component={Presentations} />
+                <PrivateRoute path="/notifications" component={Notifications} />
+                <PrivateRoute path="/map" component={MapView} />
+                <PrivateRoute path="/settings" component={Settings} />
                 <PrivateRoute path="/resources" component={AppResources} />
+                <PrivateRoute
+                  exact
+                  path="/analytics/resources"
+                  component={AnalyticsResources}
+                />
+                <PrivateRoute
+                  exact
+                  path="/analytics/templates"
+                  component={AnalyticsTemplates}
+                />
+                <PrivateRoute
+                  exact
+                  path="/analytics/presentations"
+                  component={AnalyticsPresentations}
+                />
                 <Route path="/shared" component={Shared} />
                 <PrivateRoute
                   path="/resources/:name"
@@ -88,12 +130,11 @@ class App extends Component {
                 <Route path="/callback" component={Callback} />
               </Switch>
             </Inner>
-          </ThemeProvider>
-        </Suspense>
-      </Fragment>
+          </Suspense>
+        </Fragment>
+      </ThemeProvider>
     );
   }
 }
 
 export default withRouter(App);
-// resources/${data.Name}/${data.ID}

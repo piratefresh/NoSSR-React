@@ -1,4 +1,4 @@
-import {NavLink} from "react-router-dom";
+import {NavLink, withRouter} from "react-router-dom";
 import styled from "styled-components";
 
 const NavLinkStyles = styled(NavLink)`
@@ -11,13 +11,9 @@ const NavLinkStyles = styled(NavLink)`
   color: #708eb0;
   margin-bottom: 2em;
   cursor: pointer;
-  svg {
-    margin: 1%;
-    fill: #708eb0;
-  }
 `;
 
-export default NavLinkStyles;
+export default withRouter(NavLinkStyles);
 
 // border-left: ${props =>
 //   props.style.color == "#1F98F4" ? "5px solid #1F98F4" : ""};

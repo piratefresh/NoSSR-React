@@ -75,7 +75,7 @@ class StackedBarChart extends React.Component {
       id: this.props.id,
       type: "stackedbar2d",
       width: 350,
-      height: 350,
+      height: 250,
       dataFormat: "json",
       dataSource: dataSource
     };

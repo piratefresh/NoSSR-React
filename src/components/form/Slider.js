@@ -1,8 +1,7 @@
-import React, {Fragment} from "react";
+import React from "react";
 import styled from "styled-components";
 
 const SliderStyle = styled.div`
-  margin-top: 1em;
   display: flex;
   align-self: center;
   .switch {
