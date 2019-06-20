@@ -15,13 +15,13 @@ const RadioStyle = styled.div`
     background: #eeeeff;
 
     .checker {
-      border-color: #1f98f4;
+      border-color: ${props => props.theme.colors.blue};
     }
   }
 
   input:checked + label {
     .checker {
-      box-shadow: inset 0 0 0 6px #1f98f4;
+      box-shadow: ${props => `inset 0 0 0 6px ${props.theme.colors.blue}`};
     }
   }
 
@@ -39,7 +39,7 @@ const RadioStyle = styled.div`
       background: #eeeeff;
 
       .checker {
-        box-shadow: inset 0 0 0 2px #1f98f4;
+        box-shadow: ${props => `inset 0 0 0 6px ${props.theme.colors.blue}`};
       }
     }
   }

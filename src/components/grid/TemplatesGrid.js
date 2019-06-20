@@ -21,7 +21,7 @@ const CardStyles = styled.div`
     font-size: 0.875em;
     letter-spacing: 0.52px;
     color: ${props => props.theme.colors.cardHeader};
-    border-bottom: 1px solid #eff6ff;
+    border-bottom: ${props => `${props.theme.colors.lightgrey} 1px solid`};
     width: 100%;
     min-height: 45px;
     overflow: hidden;

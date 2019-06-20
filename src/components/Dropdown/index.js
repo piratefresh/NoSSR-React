@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from "react";
+import React, {useEffect} from "react";
 import styled from "styled-components";
 import DatePickerWrapper from "../date/DatePickerWrapper";
 
@@ -6,8 +6,10 @@ const DropdownWindow = styled.div`
   z-index: 10;
   position: absolute;
   margin-top: 1em;
-  .DateRangePicker_picker {
-  }
+  background: ${props => props.theme.colors.white};
+  height: 35vh;
+  width: 100%;
+  padding-left: 0.3em;
 `;
 
 function Dropdown(props) {

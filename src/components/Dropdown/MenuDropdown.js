@@ -1,6 +1,6 @@
-import React, {useState, useCallback} from "react";
+import React, {useRef, useEffect, useState, useCallback} from "react";
+import {withRouter} from "react-router-dom";
 import BaseCardStyle from "../cards";
-import NavLink from "../Navigation/NavLink";
 import styled from "styled-components";
 import SubNavLinkStyles from "./SubNavLink";
 // icons
@@ -16,10 +16,35 @@ const Wrapper = styled.div`
   left: 100%;
 `;
 
-export default function MenuDropdown(props) {
-  const {listOpen, closeDropdown} = props;
+function MenuDropdown(props) {
+  const {listOpen, closeDropdown, setListOpen} = props;
+  const node = useRef();
+
+  const handleClickOutside = e => {
+    if (node.current.contains(e.target)) {
+      // inside click
+      console.log("inside");
+      return;
+    }
+    // outside click
+    console.log("outside");
+    return closeDropdown();
+  };
+
+  useEffect(() => {
+    if (listOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [listOpen]);
+
   return (
-    <Wrapper>
+    <Wrapper ref={node}>
       <BaseCardStyle>
         {listOpen && (
           <ul style={{padding: "2em"}}>
@@ -35,7 +60,7 @@ export default function MenuDropdown(props) {
               <TemplatesIcon />
               Templates
             </SubNavLinkStyles>
-            <SubNavLinkStyles to="/shared">
+            <SubNavLinkStyles to="/analytics/shared">
               <SharedIcon />
               Shared
             </SubNavLinkStyles>
@@ -53,3 +78,5 @@ export default function MenuDropdown(props) {
     </Wrapper>
   );
 }
+
+export default withRouter(MenuDropdown);

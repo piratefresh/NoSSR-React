@@ -32,7 +32,7 @@ class StackedColumnChart extends React.Component {
     let cardW = this.props.cardWidth;
     const chartConfigs = {
       type: "bar2d", // The chart type
-      id: "StackedBarChart",
+      id: this.props.id,
       width: cardW,
       height: 350,
       dataFormat: "json",

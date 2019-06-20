@@ -22,7 +22,7 @@ export const LoginForm = styled(Form)`
   span {
     font-weight: 400;
     font-size: 18px;
-    color: #777;
+    color: ${props => props.theme.colors.lightblack};
     margin: 1em 0;
   }
   button {
@@ -39,7 +39,7 @@ export const LoginForm = styled(Form)`
     margin: 1em 0;
     a {
       text-decoration: none;
-      color: #1f98f4;
+      color: ${props => props.theme.colors.blue};
     }
   }
 `;
@@ -50,7 +50,6 @@ export const AddCategoryForm = styled(Form)`
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    width: 100%;
   }
   img {
     width: 100%;
@@ -61,7 +60,7 @@ export const AddCategoryForm = styled(Form)`
   span {
     font-weight: 400;
     font-size: 18px;
-    color: #777;
+    color: ${props => props.theme.colors.lightblack};
     margin: 1em 0;
   }
   button {

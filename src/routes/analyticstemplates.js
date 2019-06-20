@@ -3,6 +3,7 @@ import styled from "styled-components";
 import TemplatesTable from "../components/tables/TemplatesTable";
 import StackedColumnChart from "../components/charts/StackedColumnChart";
 import LottieLoader from "../components/loading/lottieLoader";
+import AnalyticsHeader from "../components/header/AnalyticsHeader";
 // GRAPHQL
 import {GET_MASTERLISTS} from "../queries/queries";
 import {useQuery} from "react-apollo-hooks";
@@ -37,7 +38,8 @@ export default function AnalyticsTemplateScreen() {
 
   return (
     <TemplatesContent>
-      <h1>Templates Analytics</h1>
+      <h1>Templates</h1>
+      <AnalyticsHeader title="Templates Activity" />
       <StackedColumnChart />?
       <TemplatesTable resources={templates} />
     </TemplatesContent>

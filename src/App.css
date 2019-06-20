@@ -1,15 +1,3 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-body {
-  width: 100%;
-  height: 100%;
-  font-family: "Roboto", sans-serif;
-  background-color: #f0f6ff;
-}
-
 .icon,
 .text {
   vertical-align: middle;
@@ -22,10 +10,16 @@ body {
   background-color: #fff !important;
   border: none !important;
   border-bottom: 1px solid #eff6ff !important;
+  overflow: visible;
+}
+
+.k-filtercell {
+  max-height: 30px;
 }
 
 .k-grid td {
   border: none !important;
+  overflow: visible;
 }
 .k-grid th {
   border: none !important;
@@ -113,4 +107,12 @@ body {
 .marker-btn img {
   width: 20px;
   height: 20px;
+}
+
+.k-dropdown {
+  z-index: 30000;
+}
+
+.k-animation-container {
+  z-index: 10003;
 }

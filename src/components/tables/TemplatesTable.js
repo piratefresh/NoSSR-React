@@ -1,12 +1,12 @@
 import React, {Component} from "react";
 import styled from "styled-components";
-import TemplateGrid from "../grid/Grid";
+import TemplateGrid from "../grid/GridTemplates";
 
 const TableContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-top: 2em;
+  margin-top: 4em;
 `;
 
 class TableSection extends Component {

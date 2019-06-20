@@ -5,6 +5,7 @@ import {
   GridColumn as Column,
   GridToolbar
 } from "@progress/kendo-react-grid";
+import {DropDownList} from "@progress/kendo-react-dropdowns";
 import "@progress/kendo-theme-material/dist/all.css";
 import StatusIcon from "../../icons/statusIcon";
 import {Renderers} from "./renderers";
@@ -13,24 +14,12 @@ import TemplateGridHeader from "./TemplateGridHeader";
 import LottieLoader from "../loading/lottieLoader";
 
 const CardStyles = styled.div`
-  background: #ffffff;
-  box-shadow: 0 2px 15px 1px rgba(18, 106, 211, 0.11);
+  background: ${props => props.theme.colors.white};
+  box-shadow: ${props => props.theme.shadow};
   border-radius: 10px;
   width: 100%;
   padding: 2%;
   margin-top: ${props => (props.template ? "1em" : "2.5")};
-  .cardTitle {
-    font-size: 0.875em;
-    letter-spacing: 0.52px;
-    color: ${props => props.theme.colors.cardHeader};
-    border-bottom: 1px solid #eff6ff;
-    width: 100%;
-    min-height: 45px;
-    overflow: hidden;
-    @media (max-width: 1000px) {
-      text-align: center;
-    }
-  }
 `;
 
 // Clone product before edit to keep an original copy
@@ -113,12 +102,16 @@ class GridContainer extends React.Component {
       "ResourceCategoryMembership",
       "ChildResources",
       "Resources",
-      "PresentationItems"
+      "PresentationItems",
+      "CategoryName",
+      "CategoryID",
+      "ResourceID"
     ];
 
     columnNames = columnNames.filter(item => !forDeletion.includes(item));
+    columnNames.push("Category");
     console.log(columnNames);
-    const {rounded, template} = this.props;
+    const {rounded, template, categories} = this.props;
     return (
       <CardStyles>
         {template ? <TemplateGridHeader /> : null}
@@ -207,6 +200,21 @@ class GridContainer extends React.Component {
                         ) : (
                           <StatusIcon fill="#F44336" />
                         )}
+                      </td>
+                    )}
+                  />
+                );
+              } else if (name == "Category") {
+                return (
+                  <Column
+                    key={name}
+                    field={name}
+                    cell={props => (
+                      <td>
+                        <DropDownList
+                          data={categories}
+                          defaultValue={props.dataItem.CategoryName}
+                        />
                       </td>
                     )}
                   />

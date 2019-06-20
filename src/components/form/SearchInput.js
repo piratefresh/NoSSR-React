@@ -7,7 +7,7 @@ const Wrapper = styled.div`
   .searchInput {
     grid-area: input;
     border: ${props =>
-      props.rectangle ? `${props.theme.colors.lightblue} 1px solid` : "none"};
+      props.rectangle ? `${props.theme.colors.lightblue} 2px solid` : "none"};
     border-radius: ${props => (props.rectangle ? 0 : "20px")};
     flex: 1;
     font-size: 16px;
@@ -22,7 +22,7 @@ const Wrapper = styled.div`
     }
     svg {
       grid-area: label;
-      background: #1f98f4;
+      background: ${props => props.theme.colors.blue};
       height: 100%;
     }
   }

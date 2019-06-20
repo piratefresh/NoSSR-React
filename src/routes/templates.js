@@ -21,8 +21,8 @@ export default function TemplatesSection() {
   const templates = data.getTemplates;
   const resources = data.GetResources;
 
-  let result = resources.filter(o1 => {
-    return templates.some(template => o1.ResourceID === template.Resources[0]);
+  let result = resources.filter(resource => {
+    return templates.some(template => resource.ResourceID === template.Resources[0]);
   });
 
   result.map(result =>

@@ -9,6 +9,7 @@ import HeaderSection from "../components/header";
 import dataSet from "../data/dashboardData";
 import AccountGroupIcon from "../icons/AccountGroupIcon";
 import ShareVarientIcon from "../icons/ShareVarient";
+import {useSprings, animated} from "react-spring";
 
 const TableContainer = styled.div`
   display: grid;
@@ -22,83 +23,80 @@ const TableContainer = styled.div`
   }
 `;
 
-class Index extends Component {
-  render() {
-    return (
-      <Fragment>
-        <HeaderSection HeaderTitle="Dashboard" />
+const Index = () => {
+  return (
+    <Fragment>
+      <HeaderSection HeaderTitle="Dashboard" />
 
-        <DashboardSplineGraph style={{maxHeight: "500px", maxWidth: "100%"}} />
+      <DashboardSplineGraph style={{maxHeight: "500px", maxWidth: "100%"}} />
 
-        <TableContainer>
-          {dataSet.map((data, index) => {
-            console.log(data);
-            return (
-              <MiniCard style={{maxHeight: "350px"}} key={index}>
-                <CardContent>
-                  <CardTitle>{data[0].title}</CardTitle>
-                  <div className="content-section sales-reps">
+      <TableContainer>
+        {dataSet.map((data, index) => {
+          return (
+            <MiniCard style={{maxHeight: "350px"}} key={index}>
+              <CardContent>
+                <CardTitle>{data[0].title}</CardTitle>
+                <div className="content-section sales-reps">
+                  <div>
+                    <AccountGroupIcon />
+                    <span style={{marginLeft: "0.8em"}}>Sales Reps</span>
+                  </div>
+                  <div className="section">
                     <div>
-                      <AccountGroupIcon />
-                      <span style={{marginLeft: "0.8em"}}>Sales Reps</span>
+                      Views <h3>{data[0].salesReps.views}</h3>
                     </div>
-                    <div className="section">
-                      <div>
-                        Views <h3>{data[0].salesReps.views}</h3>
-                      </div>
-                      <div>
-                        Viewing Time <h3>{data[0].salesReps.viewingTime}</h3>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="content-section shared">
                     <div>
-                      <ShareVarientIcon />
-                      <span style={{marginLeft: "0.8em"}}>Shared</span>
+                      Viewing Time <h3>{data[0].salesReps.viewingTime}</h3>
                     </div>
-                    <div className="section">
-                      <div>
-                        Views <h3>{data[0].shared.views}</h3>
-                      </div>
-                      <div>
-                        Viewing Time <h3>{data[0].shared.viewingTime}</h3>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </MiniCard>
-            );
-          })}
-
-          <MiniCard style={{maxHeight: "350px"}}>
-            <CardContent>
-              <CardTitle>Shared</CardTitle>
-              <DonutChart id="donut4" style={{overflow: "hidden"}} />
-              <SharedSection>
-                <div className="section-stats">
-                  <div className="stats">
-                    <div className="title">Sent</div>
-                    <div className="stat">100|50%</div>
-                  </div>
-                  <div className="stats">
-                    <div className="title">Opened</div>
-                    <div className="stat">100|50%</div>
                   </div>
                 </div>
-              </SharedSection>
-            </CardContent>
-          </MiniCard>
-          <MiniCard style={{maxHeight: "350px"}}>
-            <CardContent>
-              <CardTitle>Users</CardTitle>
-              <StackedBarChart />
-            </CardContent>
-          </MiniCard>
-        </TableContainer>
-      </Fragment>
-    );
-  }
-}
+                <div className="content-section shared">
+                  <div>
+                    <ShareVarientIcon />
+                    <span style={{marginLeft: "0.8em"}}>Shared</span>
+                  </div>
+                  <div className="section">
+                    <div>
+                      Views <h3>{data[0].shared.views}</h3>
+                    </div>
+                    <div>
+                      Viewing Time <h3>{data[0].shared.viewingTime}</h3>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </MiniCard>
+          );
+        })}
+
+        <MiniCard style={{maxHeight: "350px"}}>
+          <CardContent>
+            <CardTitle>Shared</CardTitle>
+            <DonutChart id="donut4" style={{overflow: "hidden"}} />
+            <SharedSection>
+              <div className="section-stats">
+                <div className="stats">
+                  <div className="title">Sent</div>
+                  <div className="stat">100|50%</div>
+                </div>
+                <div className="stats">
+                  <div className="title">Opened</div>
+                  <div className="stat">100|50%</div>
+                </div>
+              </div>
+            </SharedSection>
+          </CardContent>
+        </MiniCard>
+        <MiniCard style={{maxHeight: "350px"}}>
+          <CardContent>
+            <CardTitle>Users</CardTitle>
+            <StackedBarChart />
+          </CardContent>
+        </MiniCard>
+      </TableContainer>
+    </Fragment>
+  );
+};
 
 export default Index;
 
@@ -156,7 +154,7 @@ const CardTitle = styled.h3`
   font-size: 1rem;
   letter-spacing: 0.52px;
   color: ${props => props.theme.colors.grey};
-  border-bottom: 1px solid #eff6ff;
+  border-bottom: ${props => `${props.theme.colors.lightgrey} 1px solid`};
   height: 50px;
   max-height: 50px;
   @media (max-width: 1000px) {

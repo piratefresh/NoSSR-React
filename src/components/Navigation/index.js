@@ -1,8 +1,9 @@
 import React, {useState, useCallback} from "react";
 import {withRouter} from "react-router-dom";
 import styled from "styled-components";
-import setvilogo from "../../images/setvilogo.png";
+import setviLongLogo from "../../images/setvilogo.jpg";
 import NavLink from "./NavLink";
+import ALink from "./ALink";
 import auth from "../../auth/Auth";
 import MenuDropdown from "../Dropdown/MenuDropdown";
 // icons
@@ -10,12 +11,10 @@ import HomeIcon from "../../icons/HomeIcon";
 import ResourcesIcon from "../../icons/app/ResourceIcon";
 import PresentationsIcon from "../../icons/PresentationIcon";
 import TemplatesIcon from "../../icons/TemplateIcon";
-import SharedIcon from "../../icons/SharedIcon";
 import UsersIcon from "../../icons/UsersIcon";
 import PushNotifyIcon from "../../icons/app/PushNotifyIcon";
 import SettingsIcon from "../../icons/app/SettingsIcon";
 import ActivityLogIcon from "../../icons/app/Activitylog";
-import LiveHelpIcon from "../../icons/app/LiveHelpIcon";
 import LogoutIcon from "../../icons/LogoutIcon";
 import AnalyticsIcon from "../../icons/AnalyticsIcon";
 
@@ -24,7 +23,7 @@ const Nav = styled.nav`
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  background-color: #fff;
+  background-color: ${props => props.theme.navbar};
   min-height: 100%;
   height: 100%;
   width: 150px;
@@ -36,11 +35,11 @@ const Nav = styled.nav`
     height: 100%;
     width: 100%;
     margin-top: 2em;
-    color: #708eb0;
+    color: ${props => props.theme.colors.inactive};
     .normal {
       svg {
-        margin: 1%;
-        fill: #708eb0;
+        fill: ${props => props.theme.colors.inactive};
+        transform: scale(0.7);
       }
     }
     .active {
@@ -48,20 +47,22 @@ const Nav = styled.nav`
       color: ${props => props.theme.colors.blue};
       svg {
         fill: ${props => props.theme.colors.blue};
+        transform: scale(0.7);
       }
     }
-  }
-  img {
-    height: 42px;
-    width: 42px;
   }
   .logo-container {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 150px;
-    height: 150px;
-    background-color: #1f98f4;
+    height: 80px;
+    background-color: ${props => props.theme.navbar};
+    img {
+      width: 100%;
+      height: 30px;
+      object-fit: cover;
+    }
   }
   .userImg {
     display: flex;
@@ -75,7 +76,7 @@ const Nav = styled.nav`
   }
 `;
 
-function Navigation() {
+function Navigation(props) {
   const [listOpen, setListOpen] = useState(false);
   const closeDropdown = useCallback(() => setListOpen(false), []);
 
@@ -83,12 +84,12 @@ function Navigation() {
     auth.logout();
     this.props.history.replace("/");
   };
-
+  const {isDarkMode, handleDarkMode} = props;
   return (
     <Nav>
       <div className="logo-container">
         <a href="http://">
-          <img src={setvilogo} alt="" srcSet="" />
+          <img src={setviLongLogo} alt="" srcSet="" />
         </a>
       </div>
       <div className="nav-container">
@@ -105,20 +106,19 @@ function Navigation() {
           <ResourcesIcon />
           Resources
         </NavLink>
-        <NavLink
+        {/* <NavLink
           to="/presentations"
           className="normal"
           activeClassName="active"
         >
           <PresentationsIcon />
           Presentations
-        </NavLink>
+        </NavLink> */}
         <NavLink to="/templates" className="normal" activeClassName="active">
           <TemplatesIcon />
           Templates
         </NavLink>
-        <NavLink
-          to="/analytics/resources"
+        <ALink
           className="normal"
           activeClassName="active"
           onClick={() => {
@@ -129,8 +129,8 @@ function Navigation() {
         >
           <AnalyticsIcon />
           Analytics
-          <MenuDropdown listOpen={listOpen} />
-        </NavLink>
+          <MenuDropdown listOpen={listOpen} closeDropdown={closeDropdown} />
+        </ALink>
         <NavLink to="/users" className="normal" activeClassName="active">
           <UsersIcon />
           Users
@@ -151,10 +151,6 @@ function Navigation() {
           <ActivityLogIcon />
           Activity Log
         </NavLink>
-        <NavLink to="/livehelp" className="normal" activeClassName="active">
-          <LiveHelpIcon />
-          LiveHelp
-        </NavLink>
         <NavLink
           to="/login"
           onClick={() => {
@@ -166,6 +162,14 @@ function Navigation() {
           <LogoutIcon />
           Logout
         </NavLink>
+        <button
+          onClick={() => {
+            handleDarkMode();
+            localStorage.setItem("isDarkMode", !isDarkMode);
+          }}
+        >
+          Toggle Dark Mode
+        </button>
       </div>
     </Nav>
   );

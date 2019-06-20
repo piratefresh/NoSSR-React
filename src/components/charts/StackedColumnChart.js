@@ -11,8 +11,8 @@ const CardContent = styled.div`
   .cardTitle {
     font-size: 1rem;
     letter-spacing: 0.52px;
-    color: #617182;
-    border-bottom: 1px solid #eff6ff;
+    color: ${props => props.theme.colors.grey};
+    border-bottom: ${props => `1px solid ${props.theme.colors.lightgrey}`};
     width: 100%;
     padding: 1em;
     overflow: hidden;
@@ -21,11 +21,11 @@ const CardContent = styled.div`
 
 const TableContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 2em;
   align-items: flex-start;
-  @media (max-width: 1000px) {
-    flex-direction: column;
+  @media (max-width: 800px) {
+    grid-template-rows: repeat(auto-fit, 1fr);
   }
 `;
 
@@ -34,17 +34,17 @@ export default function StackedColumnChartScreen() {
     <TableContainer>
       <MiniCard>
         <CardContent>
-          <StackedColumnChart />
+          <StackedColumnChart id="bar1" />
         </CardContent>
       </MiniCard>
       <MiniCard>
         <CardContent>
-          <StackedColumnChart />
+          <StackedColumnChart id="bar2" />
         </CardContent>
       </MiniCard>
       <MiniCard>
         <CardContent>
-          <StackedColumnChart />
+          <StackedColumnChart id="bar3" />
         </CardContent>
       </MiniCard>
     </TableContainer>

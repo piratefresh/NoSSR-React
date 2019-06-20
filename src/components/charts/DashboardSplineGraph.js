@@ -11,8 +11,8 @@ const CardContent = styled.div`
   .cardTitle {
     font-size: 1rem;
     letter-spacing: 0.52px;
-    color: #617182;
-    border-bottom: 1px solid #eff6ff;
+    color: ${props => props.theme.colors.grey};
+    border-bottom: ${props => `1px solid ${props.theme.colors.lightgrey}`};
     width: 100%;
     padding: 1em;
     overflow: hidden;
@@ -39,7 +39,7 @@ const GraphContainer = styled.div`
       h3 {
         font-size: 1.75rem;
         letter-spacing: 0.02em;
-        color: ${props => props.theme.colors.cardHeader};
+        color: ${props => props.theme.colors.grey};
       }
     }
   }

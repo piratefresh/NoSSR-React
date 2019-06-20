@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from "react";
+import React, {Fragment, useState, useCallback} from "react";
 import styled from "styled-components";
 import {
   TreeCardStyles as MiniCard,
@@ -13,6 +13,7 @@ import TreeView from "../components/treelist/TreeView";
 import GridCard from "../components/grid/Card/GridCard";
 import Modal from "../components/modal";
 import AddForm from "../components/AddForm/Form";
+import EditForm from "../components/AddForm/EditForm";
 import SearchInput from "../components/form/SearchInput";
 import LottieLoader from "../components/loading/lottieLoader";
 // GRAPHQL
@@ -29,19 +30,10 @@ const ResourceWrapper = styled.div`
   position: relative;
   display: flex;
   flex-direction: row;
-
-  .cardTitle {
+  .categoryButtons {
     display: flex;
-    color: ${props => props.theme.colors.cardHeader};
-    border-bottom: 1px solid #eff6ff;
-    width: 100%;
-    min-height: 45px;
-    overflow: hidden;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
-    @media (max-width: 1000px) {
-      text-align: center;
-    }
   }
 `;
 
@@ -54,7 +46,7 @@ const ResourceContainer = styled.div`
 
 const ResourceHeaderStyle = styled.div`
   position: relative;
-  z-index: 2000;
+  z-index: 3;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -79,7 +71,16 @@ const filterResources = (resources, selectedCategoryId) => {
 
 function Resource() {
   const [show, setShowState] = useState(false);
+  const [typeForm, setTypeForm] = useState(null);
   const [listView, setListView] = useState(false);
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  const handleItemClick = useCallback(
+    value => {
+      setSelectedItems(prevState => [...prevState, value]);
+    },
+    [] // Tells React to memoize regardless of arguments.
+  );
 
   const {data, loading, error} = useQuery(GET_MASTERLISTS);
 
@@ -109,11 +110,22 @@ function Resource() {
       <MainPageTitle>Resource Management</MainPageTitle>
       <ResourceWrapper>
         <MiniCard>
-          <div className="cardTitle">
-            <ButtonRoundedBlue type="button" onClick={showModal}>
+          <div className="categoryButtons">
+            <ButtonRoundedBlue
+              type="button"
+              onClick={() => {
+                showModal();
+                setTypeForm("Add");
+              }}
+            >
               <PlusIcon />
             </ButtonRoundedBlue>
-            <ButtonRoundedBlue>
+            <ButtonRoundedBlue
+              onClick={() => {
+                showModal();
+                setTypeForm("Edit");
+              }}
+            >
               <PencilIcon />
             </ButtonRoundedBlue>
             <ButtonRoundedRed>
@@ -124,14 +136,22 @@ function Resource() {
         </MiniCard>
 
         {/* Modal */}
-        <Modal show={show} handleClose={hideModal} modalTitle="Add Category">
-          <AddForm />
+        <Modal show={show} handleClose={hideModal}>
+          {typeForm === "Add" ? (
+            <AddForm />
+          ) : (
+            <EditForm
+              resources={resources}
+              data={categories}
+              selectedItems={selectedItems}
+            />
+          )}
         </Modal>
 
         <ResourceContainer>
           <ResourceTopBarCardStyles>
             <ResourceHeaderStyle>
-              <SearchInput />
+              <SearchInput rectangle />
 
               <div className="buttons">
                 <ButtonHalfRounded type="button" onClick={toggleList}>
@@ -142,7 +162,11 @@ function Resource() {
               </div>
             </ResourceHeaderStyle>
           </ResourceTopBarCardStyles>
-          <GridCard resources={resources} listView={listView} />
+          <GridCard
+            resources={resources}
+            listView={listView}
+            handleItemClick={handleItemClick}
+          />
         </ResourceContainer>
       </ResourceWrapper>
     </Fragment>

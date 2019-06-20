@@ -5,9 +5,9 @@ import PropTypes from "prop-types";
 const FormFieldStyles = styled.label`
   display: flex;
   flex-direction: column;
-  color: #777;
+  color: ${props => props.theme.colors.lightblack};
   font-size: 0.8em;
-  margin: 0.5em 0;
+  margin: 1em 0;
   width: 100%;
   min-width: 100%;
   position: relative;

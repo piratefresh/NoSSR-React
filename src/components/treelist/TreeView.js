@@ -15,8 +15,8 @@ const CardContent = styled.div`
   .cardTitle {
     font-size: 0.875rem;
     letter-spacing: 0.52px;
-    color: ${props => props.theme.colors.cardHeader};
-    border-bottom: 1px solid #eff6ff;
+    color: ${props => props.theme.colors.grey};
+    border-bottom: ${props => `${props.theme.colors.lightgrey} 1px solid`};
     width: 100%;
     min-height: 45px;
     margin-top: 0.7em;
@@ -54,9 +54,7 @@ function TreeCardSection(props) {
         <div className="cardTitle">
           <h3>{props.title ? props.title : ""}</h3>
         </div>
-      ) : (
-        <></>
-      )}
+      ) : null}
       <Tree data={data} />
     </CardContent>
   );

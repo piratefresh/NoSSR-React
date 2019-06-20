@@ -2,16 +2,21 @@ import React, {Component, Fragment} from "react";
 import {Link} from "react-router-dom";
 import styled from "styled-components";
 import {SingleResourceCardStyles as Card} from "../../cards";
-import ResourceGrid from "../Grid";
-import {ButtonRoundedGreen} from "../../buttons";
+import ResourceGrid from "../GridResources";
 import Checkbox from "../../checkbox";
 import {ButtonRoundedOverlay} from "../../buttons";
 import ProgressiveImage from "react-progressive-image";
-import placeholderImg from "../../../images/Rectangle.png";
+import placeholderImg from "../../../images/placeholder.gif";
 /* Icons */
 import DownloadIcon from "../../../icons/DownloadIcon";
 import EditIcon from "../../../icons/EditIcon";
 import LaunchIcon from "../../../icons/LaunchIcon";
+import JpegIcon from "../../../icons/JpgIcon";
+import PngIcon from "../../../icons/PngIcon";
+import PdfIcon from "../../../icons/PdfIcon";
+import DocIcon from "../../../icons/DocIcon";
+import ZipIcon from "../../../icons/ZipIcon";
+import FileIcon from "../../../icons/FileIcon";
 
 class GridCard extends Component {
   constructor(props) {
@@ -86,8 +91,27 @@ class GridCard extends Component {
       items: [...this.state.items, ...nextUsers]
     });
   };
+  fileTypeSwitch(filetype) {
+    switch (filetype) {
+      case ".jpeg":
+        return <JpegIcon />;
+      case ".zip":
+        return <ZipIcon />;
+      case ".doc":
+        return <DocIcon />;
+      case ".pdf":
+        return <PdfIcon />;
+      case ".png":
+        return <PngIcon />;
+      default:
+        return <FileIcon />;
+    }
+  }
+
   render() {
     const {error, hasMore, isLoading, items} = this.state;
+    const {handleItemClick} = this.props;
+    const length = 50;
     return (
       <Fragment>
         {this.props.listView ? (
@@ -96,36 +120,40 @@ class GridCard extends Component {
           <ResourceGridContainer>
             {items.map((data, i) => {
               return (
-                <Link to={`resources/${data.Name}/${data.ID}`} key={data.ID}>
-                  <Card>
-                    <CardContent>
-                      <Checkbox labelname={data.Name + i} />
-                      <ProgressiveImage
-                        src={data.Thumbnail}
-                        placeholder={placeholderImg}
-                      >
-                        {src => <img src={src} alt={data.Name} />}
-                      </ProgressiveImage>
+                <Card key={data.ID}>
+                  <CardContent>
+                    <Checkbox
+                      labelname={data.Name + i}
+                      value={data.ID}
+                      handleItemClick={handleItemClick}
+                    />
+                    <ProgressiveImage
+                      src={data.Thumbnail}
+                      placeholder={placeholderImg}
+                    >
+                      {src => <img src={src} alt={data.Name} />}
+                    </ProgressiveImage>
+                    <Link to={`resources/${data.Name}/${data.ID}`}>
                       <div className="text-content">
-                        <ButtonRoundedGreen />
-                        <h4>{data.Name}</h4>
+                        <h4>{data.Name.substring(0, length)}</h4>
+                        <span>Filetype: {data.FileType}</span>
                       </div>
-                    </CardContent>
-                    <Overlay>
-                      <div className="cba-buttons">
-                        <ButtonRoundedOverlay>
-                          <DownloadIcon />
-                        </ButtonRoundedOverlay>
-                        <ButtonRoundedOverlay>
-                          <EditIcon />
-                        </ButtonRoundedOverlay>
-                        <ButtonRoundedOverlay>
-                          <LaunchIcon />
-                        </ButtonRoundedOverlay>
-                      </div>
-                    </Overlay>
-                  </Card>
-                </Link>
+                    </Link>
+                  </CardContent>
+                  <Overlay>
+                    <div className="cba-buttons">
+                      <ButtonRoundedOverlay>
+                        <DownloadIcon />
+                      </ButtonRoundedOverlay>
+                      <ButtonRoundedOverlay>
+                        <EditIcon />
+                      </ButtonRoundedOverlay>
+                      <ButtonRoundedOverlay>
+                        <LaunchIcon />
+                      </ButtonRoundedOverlay>
+                    </div>
+                  </Overlay>
+                </Card>
               );
             })}
             {isLoading && <div>Loading...</div>}
@@ -163,7 +191,7 @@ const CardContent = styled.div`
     z-index: 5;
   }
   .k-checkbox-label::before {
-    background-color: #fff;
+    background-color: ${props => props.theme.colors.white};
   }
   img {
     display: block;
@@ -176,16 +204,21 @@ const CardContent = styled.div`
   }
   .text-content {
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     padding: 1em 1em;
-    background: #fff;
+    margin: 0.2em 0;
+    background: ${props => props.theme.colors.white};
     max-width: 300px;
+    height: 80px;
     overflow: hidden;
     border-radius: 10px;
-    button {
-      vertical-align: middle;
-      margin: 0 0.5em;
+    word-break: break-word;
+    color: ${props => props.theme.colors.grey};
+    svg {
+      height: auto;
+      width: 25px;
+      margin-right: 1em;
     }
   }
 `;
@@ -198,11 +231,12 @@ const Overlay = styled.div`
   top: 0%;
   left: 0;
   border-radius: 10px;
+  pointer-events: none;
   ${Card}:hover & {
     display: flex;
     justify-content: flex-end;
-    border: ${props => `${props.theme.colors.blue} 1px solid`}
-    box-shadow: ${props => props.theme.shadow}
+    border: ${props => `${props.theme.colors.blue} 1px solid`};
+    box-shadow: ${props => props.theme.shadow};
   }
   .cba-buttons {
     margin-top: 5px;

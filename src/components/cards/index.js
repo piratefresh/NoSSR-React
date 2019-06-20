@@ -5,9 +5,9 @@ const BaseCardStyles = styled.div`
   flex-direction: row;
   height: 100%;
   width: 100%;
-  background: #ffffff;
-  box-shadow: 0 2px 15px 1px rgba(18, 106, 211, 0.11);
-  border-radius: 10px;
+  background: ${props => props.theme.card};
+  box-shadow: ${props => props.theme.shadow};
+  border-radius: ${props => props.theme.borderRadius};
 `;
 
 export default BaseCardStyles;
@@ -32,7 +32,7 @@ export const MainCardStyles = styled(BaseCardStyles)`
       h3 {
         font-size: 1.75rem;
         letter-spacing: 0.02em;
-        color: #617182;
+        box-shadow: ${props => props.theme.colors.blue};
       }
     }
   }
@@ -72,7 +72,7 @@ export const SingleResourceCardStyles = styled(BaseCardStyles)`
 export const ResourceTopBarCardStyles = styled(BaseCardStyles)`
   position: sticky;
   top: 0%;
-  z-index: 2000;
+  z-index: 10;
   margin-bottom: 2em;
 `;
 export const MapCardStyles = styled(BaseCardStyles)`

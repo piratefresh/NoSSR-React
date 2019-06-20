@@ -12,7 +12,28 @@ export default function Presentations() {
   if (loading) {
     return <LottieLoader />;
   }
+
   const presentations = data.getPresentations;
+  const resources = data.GetResources;
+
+  let result = resources.filter(resource => {
+    return presentations.some(presentation =>
+      presentation.PresentationItems.map(
+        itemID => resource.ResourceID === itemID
+      )
+    );
+  });
+  console.log(result);
+  result.map(result =>
+    presentations.map(presentation => {
+      presentation.PresentationItems.map(item => {
+        if (item.ItemID === result.ResourceID) {
+          return (presentation.Thumbnail = result.Thumbnail);
+        }
+      });
+    })
+  );
+  console.log(presentations);
   return (
     <Fragment>
       <MainPageTitle>Presentations</MainPageTitle>

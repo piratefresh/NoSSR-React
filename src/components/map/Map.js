@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, Fragment} from "react";
 import ReactMapGL, {Marker} from "react-map-gl";
 import {useQuery} from "react-apollo-hooks";
 import {GET_MAP_MARKERS} from "../../queries/queries";
@@ -6,6 +6,9 @@ import {MapCardStyles} from "../cards/index";
 import {CardTitle} from "../titles/index";
 import LottieLoader from "../loading/lottieLoader";
 import SkateBoardingMarker from "../../images/maps-and-flags.svg";
+import styled from "styled-components";
+import {ButtonHalfRounded} from "../buttons";
+import HeaderSection from "../header/index";
 
 export default function Map() {
   const {data, loading, error} = useQuery(GET_MAP_MARKERS);
@@ -28,35 +31,50 @@ export default function Map() {
 
   const markers = data.getUserPresentationViews;
   return (
-    <MapCardStyles>
-      <CardTitle>User Map</CardTitle>
-      <ReactMapGL
-        {...viewport}
-        mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-        mapStyle="mapbox://styles/magnil/cjsncqgls1y391griaeu1r958"
-        onViewportChange={viewport => {
-          setViewport(viewport);
-        }}
-      >
-        {markers.map(user => (
-          <Marker
-            key={user.Views[0].ClientEmail}
-            latitude={parseFloat(user.Views[0].Latitude)}
-            longitude={parseFloat(user.Views[0].Longitude)}
-          >
-            {console.log(parseFloat(user.Views[0].Latitude))}
-            <button
-              className="marker-btn"
-              onClick={e => {
-                e.preventDefault();
-                setSelectedUser(user.Views[0].ClientEmail);
-              }}
+    <Fragment>
+      <HeaderSection HeaderTitle="Maps" />
+
+      <MapCardStyles>
+        <Toolbar>
+          <CardTitle>User Map</CardTitle>
+          <ButtonHalfRounded>Details</ButtonHalfRounded>
+          <span style={{marginRight: "0.5em"}}>Resources</span>
+          <span>Presentations</span>
+        </Toolbar>
+        <ReactMapGL
+          {...viewport}
+          mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+          mapStyle="mapbox://styles/magnil/cjsncqgls1y391griaeu1r958"
+          onViewportChange={viewport => {
+            setViewport(viewport);
+          }}
+        >
+          {markers.map(user => (
+            <Marker
+              key={user.Views[0].ClientEmail}
+              latitude={parseFloat(user.Views[0].Latitude)}
+              longitude={parseFloat(user.Views[0].Longitude)}
             >
-              <img src={SkateBoardingMarker} alt="Skate Park Icon" />
-            </button>
-          </Marker>
-        ))}
-      </ReactMapGL>
-    </MapCardStyles>
+              <button
+                className="marker-btn"
+                onClick={e => {
+                  e.preventDefault();
+                  setSelectedUser(user.Views[0].ClientEmail);
+                }}
+              >
+                <img src={SkateBoardingMarker} alt="Skate Park Icon" />
+              </button>
+            </Marker>
+          ))}
+        </ReactMapGL>
+      </MapCardStyles>
+    </Fragment>
   );
 }
+
+const Toolbar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2em;
+`;

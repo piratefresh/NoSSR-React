@@ -11,7 +11,7 @@ import {ApolloProvider as ApolloHooksProvider} from "react-apollo-hooks";
 import {resolvers} from "./resolvers/resolvers";
 import auth from "../src/auth/Auth";
 import * as serviceWorker from "./serviceWorker";
-import {Fetching} from "../src/components/loading/fetching";
+import LoaderLoader from "../src/components/loading/lottieLoader";
 
 const URL = "http://localhost:4000/graphql";
 const JWTToken = auth.getIdToken();
@@ -88,7 +88,7 @@ client.onClearStore(async () => {
 ReactDOM.render(
   <Router>
     <ApolloProvider client={client}>
-      <Suspense fallback={<Fetching />}>
+      <Suspense fallback={<LoaderLoader />}>
         <ApolloHooksProvider client={client}>
           <App />
         </ApolloHooksProvider>

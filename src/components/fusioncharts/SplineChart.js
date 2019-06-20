@@ -165,7 +165,7 @@ class SplineChart extends React.Component {
     };
     return (
       <div className="chartContainer">
-        <ReactFC {...chartConfigs} />
+        <ReactFC {...chartConfigs} onRender={this.renderComplete} />
       </div>
     );
   }

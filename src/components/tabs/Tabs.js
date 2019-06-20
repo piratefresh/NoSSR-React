@@ -60,6 +60,6 @@ const TabsContainer = styled.div`
   .tab-list-active {
     background-color: #fff;
     border: none;
-    border-bottom: 3px solid #1f98f4;
+    border-bottom: ${props => `${props.theme.colors.blue} 3px solid`};
   }
 `;

@@ -1,8 +1,8 @@
-import React from "react";
+import React, {Fragment} from "react";
 import {Helmet} from "react-helmet";
 
 const Meta = props => (
-  <>
+  <Fragment>
     <Helmet>
       <title>My App</title>
       <meta
@@ -16,7 +16,7 @@ const Meta = props => (
       />
       <link href="./styles/styles.css" rel="stylesheet" />
     </Helmet>
-  </>
+  </Fragment>
 );
 
 export default Meta;

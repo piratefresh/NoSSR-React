@@ -16,10 +16,10 @@ const Input = styled.input`
   padding-top: 0.5em;
   padding-bottom: 0.5em;
   :active {
-    border: 2px solid #1f98f4;
+    border: ${props => `2px solid ${props.theme.colors.blue}`};
   }
   :focus {
-    border: 2px solid #1f98f4;
+    border: ${props => `2px solid ${props.theme.colors.blue}`};
   }
   &::-ms-clear {
     display: none;

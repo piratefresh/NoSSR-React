@@ -35,7 +35,8 @@ export const ButtonStyleBlue = styled(BaseButtonStyle)`
   color: #fff;
 `;
 export const ButtonStyleSecondary = styled(BaseButtonStyle)`
-  border: 1px solid #617182;
+  border: 1px solid #ecf4fd;
+  box-shadow: none;
 `;
 export const ButtonGraphStylePrimary = styled(BaseButtonStyle)`
   background-color: #1f98f4;
@@ -60,6 +61,7 @@ export const ButtonRoundedBlue = styled(BaseButtonStyle)`
   background: #1f98f4;
   border-radius: 50%;
   box-shadow: none;
+  color: #fff;
   padding: 0.3em 0.5em;
 `;
 export const ButtonRoundedRed = styled(BaseButtonStyle)`

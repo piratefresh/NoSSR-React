@@ -17,6 +17,8 @@ const GET_MASTERLISTS = gql`
       Thumbnail
       ID
       Name
+      FileType
+      CategoryName
       CategoryID
       ResourceID
       ResourceCategoryMembership {
@@ -111,17 +113,60 @@ const GET_TEMPLATES = gql`
 const GET_PRESENTATIONS = gql`
   query {
     getPresentations {
+      Thumbnail
       UserName
       Name
       Message
       DateAdded
       LastChanged
       PresentationItems {
+        ItemID
+        Thumbnail
         Name
         Order
         PresentationKitID
       }
     }
+    GetResources {
+      Thumbnail
+      ID
+      Name
+      FileType
+      CategoryName
+      CategoryID
+      ResourceID
+      ResourceCategoryMembership {
+        ResourceID
+        ResourceCategoryID
+        ResourceOrder
+      }
+      ChildResources {
+        ...ResourcesChildrenRecursive
+      }
+    }
+  }
+  fragment ResourcesChildrenRecursive on ChildResources {
+    ChildResources {
+      ...ResourcesFields
+      ChildResources {
+        ...ResourcesFields
+        ChildResources {
+          ...ResourcesFields
+          ChildResources {
+            ...ResourcesFields
+            ChildResources {
+              ...ResourcesFields
+            }
+          }
+        }
+      }
+    }
+  }
+
+  fragment ResourcesFields on ChildResources {
+    Thumbnail
+    ID
+    SortOrder
   }
 `;
 

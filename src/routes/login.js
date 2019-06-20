@@ -36,7 +36,7 @@ const LoginContainer = styled.div`
   }
   a {
     text-decoration: none;
-    color: #1f98f4;
+    color: ${props => props.theme.colors.blue};
   }
 `;
 
